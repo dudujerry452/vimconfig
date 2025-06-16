@@ -54,6 +54,11 @@ nnoremap <CR> :noh<CR><CR>:<backspace> " dont display annoying last matches and 
 
 set mouse=a " enable mouse! 
 
+" ctrl + s will save the file
+nnoremap <C-s> :w<CR>
+inoremap <C-s> <Esc>:w<CR>a
+vnoremap <C-s> <Esc>:w<CR>gv
+
 so ~/.vim/plugins.vim
 so ~/.vim/plugin-config.vim
 so ~/.vim/autoclose.vim
