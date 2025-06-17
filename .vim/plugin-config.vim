@@ -1,9 +1,10 @@
 
 " nerd tree
-nnoremap <C-t> :NERDTreeToggle<CR> 
+nnoremap <C-t> :NERDTreeToggle \| vertical resize 15<CR>
 " normal mode: non-recurisve mapping, <CR> always <CR>
 " Press Ctrl+T will show and hidden nerdtree. 
 let NERDTreeShowHidden=1
+let NERDTreeMinimalUI=1
 " show hidden files defaultly
 let NERDTreeRespectWildIgnore=1
 " respect wildnore 

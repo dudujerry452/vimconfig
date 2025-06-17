@@ -3,10 +3,13 @@ syntax on " enable lint
 filetype plugin indent on
 
 
-"au BufNewFile,BufRead *.py
-"    \ set tabstop=4 |
-"    \ set softtabstop=4 |
-"    \ set shiftwidth=4 |
+"中文编码相关 
+set fileformat=unix " unix or DOS, determine line terminators
+set fileencoding=utf8
+" 自动判断编码时，依次尝试以下编码：
+set fileencodings=ucs-bom,utf-8,gb18030,default
+" gb18030 最好在 UTF-8 前面，否则其它编码的文件极可能被误识为 UTF-8
+
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
@@ -57,8 +60,13 @@ nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>a
 vnoremap <C-s> <Esc>:w<CR>gv
 
+nnoremap <leader>q :qall!<CR>
+tnoremap <Esc> <C-\><C-n>
+
 so ~/.vim/plugins.vim
 so ~/.vim/plugin-config.vim
+so ~/.vim/directorylayout.vim
+so ~/.vim/toggleterm.vim
 so ~/.vim/autoclose.vim
 
 set termguicolors " true color: 2^24 colors
@@ -75,45 +83,3 @@ let g:terminal_ansi_colors = [
 \]
 
 
-"中文编码相关 
-set fileformat=unix " unix or DOS, determine line terminators
-set fileencoding=utf8
-" 自动判断编码时，依次尝试以下编码：
-set fileencodings=ucs-bom,utf-8,gb18030,default
-" gb18030 最好在 UTF-8 前面，否则其它编码的文件极可能被误识为 UTF-8
-
-
-
-
-" 只剩nerdtree时自动退出
-autocmd BufEnter * if (winnr("$") == 1 && &filetype == "nerdtree") | q | endif
-nnoremap <leader>q :qall!<CR>
-
-" ============================================================================
-" Cpp Auto Layout: The Definitive, Robust Solution
-" ============================================================================
-function! SetupCppLayout()
-    " 检查标志位，防止重复创建
-    if exists('b:cpp_layout_applied') && b:cpp_layout_applied == 1
-        return
-    endif
-    " --- 1. 创建布局 ---
-    NERDTreeFind
-    " 跳转到 NERDTree 窗口去调整尺寸
-    wincmd h " move left
-    vertical resize 20
-    " 跳回右边的代码窗口
-    wincmd l " move right
-    " 在下方创建终端
-    belowright terminal
-    resize 7
-    wincmd k
-    " --- 3. 设置标志位 ---
-    let b:cpp_layout_applied = 1
-endfunction
-
-" 备选方案：只在启动时触发
-augroup CppLayoutOnEnter
-  autocmd!
-  autocmd VimEnter * if &filetype == 'cpp' | call SetupCppLayout() | endif
-augroup END
