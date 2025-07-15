@@ -59,6 +59,7 @@ set mouse=a " enable mouse!
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>a
 vnoremap <C-s> <Esc>:w<CR>gv
+nnoremap <Leader>ya ggVG"+y
 
 nnoremap <leader>q :qall!<CR>
 tnoremap <Esc> <C-\><C-n>
