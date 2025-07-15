@@ -37,6 +37,7 @@ set noshowmode " dont show insert mode or something
 set conceallevel=1 "how characters are conceealed
 
 set noerrorbells visualbell t_vb= " DON'T RING MORE!!!
+set belloff=esc " press esc in normal mode the screen will flick. so disable it
 set noswapfile " no use it because undodir 
 set nobackup
 set undodir=~/.vim/undodir " can store undo files through open and close file
