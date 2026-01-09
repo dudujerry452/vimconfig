@@ -65,6 +65,26 @@ nnoremap <Leader>ya ggVG"+y
 nnoremap <leader>q :qall!<CR>
 tnoremap <Esc> <C-\><C-n>
 
+" Quick window navigation with Ctrl+hjkl
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Terminal mode window navigation
+" Use <Cmd> to execute command without leaving terminal mode first
+tnoremap <C-h> <Cmd>wincmd h<CR><Cmd>call <SID>EnterTerminalIfNeeded()<CR>
+tnoremap <C-j> <Cmd>wincmd j<CR><Cmd>call <SID>EnterTerminalIfNeeded()<CR>
+tnoremap <C-k> <Cmd>wincmd k<CR><Cmd>call <SID>EnterTerminalIfNeeded()<CR>
+tnoremap <C-l> <Cmd>wincmd l<CR><Cmd>call <SID>EnterTerminalIfNeeded()<CR>
+
+" Helper function to enter terminal mode if we're in a terminal buffer
+function! s:EnterTerminalIfNeeded()
+    if &buftype == 'terminal'
+        startinsert
+    endif
+endfunction
+
 so ~/.vim/plugins.vim
 so ~/.vim/plugin-config.vim
 so ~/.vim/directorylayout.vim
