@@ -1,43 +1,40 @@
 " ============================================================================
-" Toggle Terminal (Named, Hide/Show Version - The Definitive)
+" Toggle Terminal (Named, Hide/Show Version - Optimized)
 " ============================================================================
 
-function! ToggleTerminal()
-    " 1. [关键修复] 寻找带有我们特殊标记的终端缓冲区
+function! s:ToggleTerminal()
+    " Find terminal buffer with our special marker
     let term_buf_nr = -1
     for buf in getbufinfo({'buftype': 'terminal'})
-        " getbufvar() 可以安全地获取另一个缓冲区的变量值
         if getbufvar(buf.bufnr, 'toggle_terminal_id', 0) == 1
             let term_buf_nr = buf.bufnr
             break
         endif
     endfor
 
-    " 2. 如果我们命名的终端缓冲区存在...
+    " If our terminal buffer exists...
     if term_buf_nr != -1
-
-        " 检查它是否在某个窗口中可见
         let term_win_id = bufwinid(term_buf_nr)
 
         if term_win_id != -1
-            " 它可见，所以隐藏它
+            " Terminal is visible, hide it
             call win_execute(term_win_id, 'hide')
         else
-            " 它被隐藏了，所以重新显示它
-            belowright 5split " 先创建一个5行高的空窗口
-            execute "buffer " . term_buf_nr 
+            " Terminal is hidden, show it
+            belowright 5split
+            execute "buffer " . term_buf_nr
             startinsert
         endif
     else
-        " 3. 如果我们命名的终端完全不存在，就创建一个全新的
-        belowright terminal 
+        " Terminal doesn't exist, create a new one
+        belowright terminal
         resize 5
-        let b:toggle_terminal_id = 1 " 设置“身份证”
-        startinsert
-        
+        let b:toggle_terminal_id = 1
         startinsert
     endif
 endfunction
 
-" 映射保持不变
-nnoremap <silent> <Leader>t :call ToggleTerminal()<CR>
+" Toggle terminal with Ctrl+Z
+nnoremap <silent> <C-z> :call <SID>ToggleTerminal()<CR>
+" Also work in terminal mode (will override shell's Ctrl+Z suspend)
+tnoremap <silent> <C-z> <C-\><C-n>:call <SID>ToggleTerminal()<CR>
