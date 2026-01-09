@@ -36,5 +36,5 @@ endfunction
 
 " Toggle terminal with Ctrl+Z
 nnoremap <silent> <C-z> :call <SID>ToggleTerminal()<CR>
-" Also work in terminal mode (will override shell's Ctrl+Z suspend)
-tnoremap <silent> <C-z> <C-\><C-n>:call <SID>ToggleTerminal()<CR>
+" Use <Cmd> to avoid mode change side effects
+tnoremap <silent> <C-z> <Cmd>call <SID>ToggleTerminal()<CR>
