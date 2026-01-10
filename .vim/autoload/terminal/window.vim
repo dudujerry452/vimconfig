@@ -93,8 +93,8 @@ function! terminal#window#CreateCommandTerminal()
     let b:command_terminal_id = 1
     let s:command_terminal_buf = bufnr('%')
 
-    " Set up terminal mode mappings (will be updated by mappings.vim later)
-    tnoremap <buffer> <silent> <leader>g <Cmd>call terminal#window#ToggleCommandTerminal()<CR>
+    " Apply dynamic mappings from current config
+    call terminal#mappings#ApplyToCommandTerminal()
 
     startinsert
 endfunction

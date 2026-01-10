@@ -37,11 +37,15 @@ set conceallevel=1 "how characters are conceealed
 
 set noerrorbells visualbell t_vb= " DON'T RING MORE!!!
 set belloff=esc " press esc in normal mode the screen will flick. so disable it
-set noswapfile " no use it because undodir 
+set noswapfile " no use it because undodir
 set nobackup
 set undodir=~/.vim/undodir " can store undo files through open and close file
 set undofile
 set clipboard=unnamed
+
+" Command and search history
+set history=10000 " remember more commands and search history
+set viminfo='100,<50,s10,h " save viminfo with marks, registers, etc.
 
 set ignorecase " if no upper case , all cases will be display 
 set smartcase " but if there is, only correct case will be display 
@@ -53,12 +57,21 @@ nnoremap <CR> :noh<CR><CR>:<backspace> " dont display annoying last matches and 
 " return noh 
 " clear "noh" display
 
-set mouse=a " enable mouse! 
+set mouse=a " enable mouse!
+
+" Reduce timeout for key mapping sequences (fixes delay after typing '(')
+set timeoutlen=1000  " Wait 1000ms (default) for next key
 
 " ctrl + s will save the file and return to normal mode
 nnoremap <C-s> :w<CR>
 inoremap <C-s> <Esc>:w<CR>
 vnoremap <C-s> <Esc>:w<CR>
+
+" ctrl + a will quit all without saving
+nnoremap <C-a> :qa!<CR>
+inoremap <C-a> <Esc>:qa!<CR>
+vnoremap <C-a> <Esc>:qa!<CR>
+
 nnoremap <Leader>ya ggVG"+y
 
 nnoremap <leader>q :qall!<CR>
@@ -69,6 +82,20 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" Tab (buffer tab) navigation
+nnoremap <S-Tab> :tabnext<CR>
+nnoremap <S-p> :tabnew<Space>
+" Leader + number for tab switching
+nnoremap <Leader>1 1gt
+nnoremap <Leader>2 2gt
+nnoremap <Leader>3 3gt
+nnoremap <Leader>4 4gt
+nnoremap <Leader>5 5gt
+nnoremap <Leader>6 6gt
+nnoremap <Leader>7 7gt
+nnoremap <Leader>8 8gt
+nnoremap <Leader>9 9gt
 
 " Terminal mode window navigation
 " Use <Cmd> to execute command without leaving terminal mode first

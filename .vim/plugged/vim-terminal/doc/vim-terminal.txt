@@ -1,0 +1,290 @@
+*vim-terminal.txt*    Smart terminal and command execution for Vim
+
+Author:  vim-terminal contributors
+License: MIT
+
+==============================================================================
+CONTENTS                                                *vim-terminal-contents*
+
+    1. Introduction ....................... |vim-terminal-intro|
+    2. Features ........................... |vim-terminal-features|
+    3. Quick Start ........................ |vim-terminal-quickstart|
+    4. Terminals .......................... |vim-terminal-terminals|
+    5. Configuration ...................... |vim-terminal-config|
+    6. Commands ........................... |vim-terminal-commands|
+    7. Key Mappings ....................... |vim-terminal-mappings|
+    8. .vsettings.json .................... |vim-terminal-vsettings|
+    9. Language Defaults .................. |vim-terminal-languages|
+   10. Examples ........................... |vim-terminal-examples|
+
+==============================================================================
+1. Introduction                                          *vim-terminal-intro*
+
+vim-terminal provides smart terminal and command execution capabilities:
+
+• Two independent terminals (user shell and command output)
+• Project-aware configuration via .vsettings.json
+• Dynamic key mappings based on file type and project
+• Session command support for REPLs (ghci, ipython, etc.)
+• Automatic project root detection
+
+==============================================================================
+2. Features                                            *vim-terminal-features*
+
+USER TERMINAL ~
+    Free shell environment accessible via CTRL-Z
+
+COMMAND TERMINAL ~
+    Project command execution with automatic cd to project root
+    Toggle with <leader>g
+
+MAIN FILE TRACKING ~
+    Automatically tracks current working file across splits
+    Ignores terminal and special buffers
+
+PROJECT CONFIGURATION ~
+    Searches for .vsettings.json in current and parent directories
+    Configuration priority: .vsettings.json > filetype defaults > global
+
+DYNAMIC KEY MAPPINGS ~
+    Automatically creates shortcuts based on configuration
+    Works in both source files and command terminal
+
+SESSION COMMANDS ~
+    Use @@ prefix for REPL commands (e.g., @@:reload in ghci)
+
+==============================================================================
+3. Quick Start                                      *vim-terminal-quickstart*
+
+Basic usage:
+
+1. Open a Haskell or Rust file
+2. Press <leader>l to load/run
+3. Press <leader>r to reload/run again
+4. Press <leader>g to toggle command terminal
+5. Press CTRL-Z to toggle user terminal
+
+Language-specific defaults are provided for Haskell and Rust.
+
+==============================================================================
+4. Terminals                                        *vim-terminal-terminals*
+
+USER TERMINAL (CTRL-Z) ~
+
+Pure shell environment for general use. Completely independent from
+command terminal.
+
+Key mappings:
+    CTRL-Z      Toggle user terminal (normal and terminal mode)
+
+COMMAND TERMINAL (<leader>g) ~
+
+Executes project commands with automatic directory management.
+Closes and recreates for normal commands, preserves session for
+@@ commands.
+
+Key mappings:
+    <leader>g   Toggle command terminal
+    <leader>*   Project-specific commands (configured via .vsettings.json)
+
+==============================================================================
+5. Configuration                                      *vim-terminal-config*
+
+Configuration variables (set in .vimrc):
+
+                                            *g:runner_command_terminal_height*
+g:runner_command_terminal_height
+    Default: 10
+    Height of command terminal in rows.
+
+                                            *g:runner_user_terminal_height*
+g:runner_user_terminal_height
+    Default: 5
+    Height of user terminal in rows.
+
+                                            *g:runner_auto_cd_project_root*
+g:runner_auto_cd_project_root
+    Default: 1
+    Auto cd to project root before executing commands.
+
+                                            *g:runner_clear_before_execute*
+g:runner_clear_before_execute
+    Default: 1
+    Clear screen before executing normal commands.
+
+                                            *g:runner_project_root_markers*
+g:runner_project_root_markers
+    Default: ['.vsettings.json', '.git', 'Cargo.toml', 'stack.yaml']
+    List of files/directories used to detect project root (priority order).
+
+Example configuration in .vimrc: >
+    let g:runner_command_terminal_height = 12
+    let g:runner_user_terminal_height = 6
+    let g:runner_project_root_markers = ['.vsettings.json', '.git']
+<
+
+==============================================================================
+6. Commands                                          *vim-terminal-commands*
+
+:RunnerReload                                              *:RunnerReload*
+    Reload configuration from .vsettings.json
+
+:RunnerGenerateConfig [filetype]                  *:RunnerGenerateConfig*
+    Generate .vsettings.json template for current or specified filetype
+
+:RunnerShowMainFile                                  *:RunnerShowMainFile*
+    Display current main file information
+
+:RunnerExecute {command}                                *:RunnerExecute*
+    Execute command in command terminal
+
+:RunnerToggleCommand                                *:RunnerToggleCommand*
+    Toggle command terminal visibility
+
+:RunnerToggleUser                                      *:RunnerToggleUser*
+    Toggle user terminal visibility
+
+==============================================================================
+7. Key Mappings                                      *vim-terminal-mappings*
+
+GLOBAL MAPPINGS ~
+
+    CTRL-Z          Toggle user terminal (both normal and terminal mode)
+    <leader>g       Toggle command terminal
+
+DYNAMIC MAPPINGS (based on .vsettings.json) ~
+
+Dynamic mappings are created based on your .vsettings.json configuration.
+These work in both source files and command terminal.
+
+Haskell defaults:
+    <leader>l       Load file in ghci
+    <leader>r       Reload in ghci (@@:reload)
+    <leader>t       Type check (@@:type main)
+    <leader>q       Quit ghci (@@:quit)
+
+Rust defaults:
+    <leader>b       cargo build
+    <leader>r       cargo run
+    <leader>c       cargo check
+    <leader>t       cargo test
+
+==============================================================================
+8. .vsettings.json                                  *vim-terminal-vsettings*
+
+PROJECT CONFIGURATION FILE ~
+
+Create .vsettings.json in your project root to define custom commands:
+>
+    {
+      "l": "ghci {$}",
+      "r": "@@:reload",
+      "b": "cargo build --release",
+      "t": "python3 {$}"
+    }
+<
+
+VARIABLES ~
+
+    {$}             Current main file path (automatically quoted)
+
+Future expansions may include {name}, {dir}, {root}, {ext}.
+
+SESSION COMMANDS ~
+
+Prefix commands with @@ to send them to an existing process instead
+of creating a new terminal:
+>
+    {
+      "l": "ghci {$}",       # Starts ghci (closes old terminal)
+      "r": "@@:reload",      # Sends :reload to existing ghci
+      "t": "@@:type main"    # Sends :type main to existing ghci
+    }
+<
+
+GENERATION ~
+
+Generate a template .vsettings.json: >
+    :RunnerGenerateConfig
+    :RunnerGenerateConfig haskell
+<
+
+==============================================================================
+9. Language Defaults                              *vim-terminal-languages*
+
+HASKELL ~
+
+Default commands for .hs files:
+    <leader>l       ghci {$}          Load file in ghci
+    <leader>r       @@:reload         Reload in ghci session
+    <leader>t       @@:type main      Type check main
+    <leader>q       @@:quit           Quit ghci
+
+RUST ~
+
+Default commands for .rs files:
+    <leader>b       cargo build       Build project
+    <leader>r       cargo run         Run project
+    <leader>c       cargo check       Quick check (faster)
+    <leader>t       cargo test        Run tests
+
+PROJECT ROOT DETECTION ~
+
+For Haskell: looks for stack.yaml or .cabal file
+For Rust: looks for Cargo.toml
+Fallback: .git directory or .vsettings.json
+
+==============================================================================
+10. Examples                                        *vim-terminal-examples*
+
+BASIC HASKELL WORKFLOW ~
+>
+    # 1. Open Haskell file
+    vim src/Main.hs
+
+    # 2. Load in ghci
+    <leader>l
+
+    # 3. Edit code, save with Ctrl-S
+
+    # 4. Reload ghci (keeps session)
+    <leader>r
+
+    # 5. Type check
+    <leader>t
+
+    # 6. Hide terminal
+    <leader>g
+<
+
+CUSTOM PROJECT CONFIGURATION ~
+
+Create .vsettings.json in project root:
+>
+    {
+      "_comment": "Custom build commands",
+      "b": "make build",
+      "r": "make run",
+      "t": "make test",
+      "d": "make debug"
+    }
+<
+
+Then use:
+    <leader>b       Run make build
+    <leader>r       Run make run
+    <leader>t       Run make test
+    <leader>d       Run make debug
+
+PYTHON WITH VIRTUAL ENV ~
+>
+    {
+      "r": "python3 {$}",
+      "t": "pytest",
+      "i": "ipython",
+      "c": "@@import {$}"
+    }
+<
+
+==============================================================================
+vim:tw=78:ts=8:ft=help:norl:

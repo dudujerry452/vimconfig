@@ -67,3 +67,9 @@ function! s:ApplyToCommandTerminal(config)
                      \ key, escape(cmd, '"'))
     endfor
 endfunction
+
+" Public function to apply mappings to command terminal (called when creating terminal)
+function! terminal#mappings#ApplyToCommandTerminal()
+    let config = terminal#settings#GetEffectiveConfig()
+    call s:ApplyToCommandTerminal(config)
+endfunction
