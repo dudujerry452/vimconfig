@@ -56,10 +56,10 @@ nnoremap <CR> :noh<CR><CR>:<backspace> " dont display annoying last matches and 
 
 set mouse=a " enable mouse! 
 
-" ctrl + s will save the file
+" ctrl + s will save the file and return to normal mode
 nnoremap <C-s> :w<CR>
-inoremap <C-s> <Esc>:w<CR>a
-vnoremap <C-s> <Esc>:w<CR>gv
+inoremap <C-s> <Esc>:w<CR>
+vnoremap <C-s> <Esc>:w<CR>
 nnoremap <Leader>ya ggVG"+y
 
 nnoremap <leader>q :qall!<CR>
