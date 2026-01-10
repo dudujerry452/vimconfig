@@ -2,7 +2,6 @@ syntax on " enable lint
 
 filetype plugin indent on
 
-
 "中文编码相关 
 set fileformat=unix " unix or DOS, determine line terminators
 set fileencoding=utf8
@@ -88,8 +87,21 @@ endfunction
 so ~/.vim/plugins.vim
 so ~/.vim/plugin-config.vim
 so ~/.vim/directorylayout.vim
-so ~/.vim/toggleterm.vim
+" so ~/.vim/toggleterm.vim  " Replaced by vim-terminal plugin
 so ~/.vim/autoclose.vim
+
+" ============================================================================
+" vim-terminal plugin configuration
+" ============================================================================
+" The plugin is located at ~/.vim/plugged/vim-terminal/
+" It will be automatically loaded by Vim's runtimepath
+
+" Optional: Override default settings
+" let g:runner_command_terminal_height = 12
+" let g:runner_user_terminal_height = 6
+" let g:runner_auto_cd_project_root = 1
+" let g:runner_clear_before_execute = 1
+" let g:runner_project_root_markers = ['.git', 'Cargo.toml', 'stack.yaml', '.vsettings.json']
 
 set termguicolors " true color: 2^24 colors
                   " run echo $COLORTERM and test https://github.com/termstandard/colors

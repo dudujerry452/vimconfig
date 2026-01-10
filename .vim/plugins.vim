@@ -1,14 +1,17 @@
 call plug#begin('~/.vim/plugged')
 
-Plug 'morhetz/gruvbox' " color theme 
+Plug 'morhetz/gruvbox' " color theme
 Plug 'scrooloose/nerdtree' " file explorer
-Plug 'vim-airline/vim-airline' " bottom state line 
+Plug 'vim-airline/vim-airline' " bottom state line
 
 Plug 'sheerun/vim-polyglot' " language lint
-Plug 'tpope/vim-commentary' " gc to comment lines 
+Plug 'tpope/vim-commentary' " gc to comment lines
 Plug 'tpope/vim-surround' " ysw to surround words
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" Local plugin: vim-terminal
+Plug '~/.vim/plugged/vim-terminal'
 
 call plug#end() 
 
